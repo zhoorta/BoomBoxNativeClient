@@ -6,7 +6,7 @@ import Sound from 'react-native-sound';
 import Toolbar from './components/Toolbar.js'
 import LocalContent from './components/LocalContent.js'
 import RemoteContent from './components/RemoteContent.js'
-import DownloadTask from './components/DownloadTask.js'
+import TaskList from './components/TaskList.js'
 import FileBase from './services/FileBase.js'
 import Utils from './services/Utils.js'
 
@@ -38,9 +38,25 @@ export default class App extends Component {
 
   refreshLocalContent = async () => {     
     var local_content = await this.db.read()
-    //console.log('local_content',this.utils.returnContentByTag(local_content))
     this.setState({ local_content: local_content }) 
   }
+
+  
+  deleteLocalContent = async (id) => {     
+    var local_content = this.state.local_content
+
+    var content_idx = local_content.findIndex( (item) => {
+      return item.id == id
+    })
+    local_content.splice(content_idx,1)
+
+    this.db.write(local_content)
+    this.db.deleteFile(id)
+    this.setState({ local_content: local_content }) 
+    console.log('local content | deleted')
+  }
+
+
 
   refreshRemoteContent = async () => {     
     //fetch(this.state.server + '/content/sort/by/tag')
@@ -88,7 +104,6 @@ export default class App extends Component {
     this.setState({ local_content: local_content,  tasks: tasks })
 
     console.log('local_content | created')
-    console.log(local_content)
 
   }
 
@@ -165,14 +180,10 @@ export default class App extends Component {
 
           <Toolbar show={this.state.show} navigate={this.navigate} />
 
-
-          <Text>TASKS:</Text>
-          { this.state.tasks.map((obj) =>
-            <View key={obj.id} style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap', borderBottomWidth: 1, marginTop:1, marginBottom: 3 }}>
-              <DownloadTask server={this.state.server} content={obj} onFinishDownload={this.onFinishDownload} />
-            </View>
-          )}
-
+          { this.state.tasks.length > 0 ? 
+            <TaskList server={this.state.server} tasks={this.state.tasks} onFinishDownload={this.onFinishDownload} />
+            : null
+          }
 
           { this.state.show.remote ?
             <RemoteContent content={this.utils.returnContentByTag(this.state.remote_content)} navigate={this.navigate} downloadContent={this.downloadContent}/>
@@ -180,7 +191,7 @@ export default class App extends Component {
           }
 
           { this.state.show.local ?
-            <LocalContent content={this.utils.returnContentByTag(this.state.local_content)} player_id={this.state.player_id} pauseContent={this.pauseContent} playContent={this.playContent}/>
+            <LocalContent content={this.utils.returnContentByTag(this.state.local_content)} player_id={this.state.player_id} pauseContent={this.pauseContent} playContent={this.playContent} deleteLocalContent={this.deleteLocalContent}/>
             : null
           }
 

@@ -26,10 +26,8 @@ export default class Utils {
 
 		var curr_tag = null
 		var curr_idx = -1
-
 		var ret = []
 
-console.log('returnContentByTag',data)
 		data = data.sort(this.comparetag) 
 
 		data.map((item) => {

@@ -6,7 +6,9 @@ export default class Filebase {
 
 	constructor(dbfile) {
 
-		this.dbfile = RNFetchBlob.fs.dirs.CacheDir + '/' + dbfile
+		this.path = RNFetchBlob.fs.dirs.CacheDir + '/'
+		this.dbfile = this.path + '/' + dbfile
+		
 	}
 
 
@@ -17,6 +19,11 @@ export default class Filebase {
 
 	async write(obj) {
 		return RNFetchBlob.fs.writeFile(this.dbfile, JSON.stringify(obj, null, 2), 'utf8')
+			.then(()=>{ return true })
+	}
+
+	async deleteFile(id) {
+		return RNFetchBlob.fs.unlink(this.path + id + '.ogg')
 			.then(()=>{ return true })
 	}
 

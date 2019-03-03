@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import { Avatar, Card, ListItem, Button, Icon, Image } from 'react-native-elements'
+
 import RNFetchBlob from 'rn-fetch-blob'
+
 
 export default class DownloadTask extends Component {
 
@@ -24,9 +27,9 @@ export default class DownloadTask extends Component {
 		if(this._isMounted) {
 		    RNFetchBlob
 		      .config({
-		        path : RNFetchBlob.fs.dirs.CacheDir + '/' + this.props.content.id + '.ogg'
+		        path : RNFetchBlob.fs.dirs.CacheDir + '/' + this.props.task.id + '.ogg'
 		      })
-		      .fetch('GET', (this.props.server + '/content/' + this.props.content.id) , {
+		      .fetch('GET', (this.props.server + '/content/' + this.props.task.id) , {
 		        //some headers ..
 		      })
 
@@ -35,10 +38,10 @@ export default class DownloadTask extends Component {
 		      })
 		      .then((res) => {
 
-		        console.log('task #' + this.props.content.id + ' | File saved to ', res.path())
-		        console.log('task #' + this.props.content.id + ' | finished')
+		        console.log('task #' + this.props.task.id + ' | File saved to ', res.path())
+		        console.log('task #' + this.props.task.id + ' | finished')
 
-		        this.props.onFinishDownload(this.props.content.id,res.path())
+		        this.props.onFinishDownload(this.props.task.id,res.path())
 		        
 		      })
 		}
@@ -47,29 +50,52 @@ export default class DownloadTask extends Component {
 
 	render() {
 
-		return (
-			<View style={styles.container}>
-              <Text style={styles.title}>{this.props.content.title}</Text>
-              <Text style={styles.length}>{this.state.progress}% downloaded</Text>
-            </View>
-			)
+
+		return (   
+
+			<View style={styles.orangecard}>    
+				<View key={this.props.task.id} style={styles.rowcontainer}>
+					<View>
+					      <Avatar rounded source={{ uri: this.props.task.thumbnail_url }} style={styles.avatar}/>
+					</View>
+				</View>  
+				<View>
+					<Text style={styles.title}>{this.props.task.title}</Text>
+					<Text style={styles.length}>{this.state.progress}% downloaded</Text>   
+				</View>                        
+ 			</View>
+
+		)
 	}
+
 }
 
 
-const styles = StyleSheet.create({
 
-  container: {
+
+
+const styles = StyleSheet.create({
+  rowcontainer: {
     flex: 1, 
-    backgroundColor: '#00dede',
-    padding: 10
-  },  
+    flexDirection: 'row', 
+    justifyContent: 'space-between'
+  },
   title: {
-    //fontFamily: 'oswald',
-    fontSize: 14
+  	fontFamily: 'Oswald',
+    fontSize: 16,
   },
   length: {
-    //fontFamily: 'oswald',
-    fontSize: 9
+  	fontFamily: 'Oswald',
+    fontSize: 12
+  },  
+  avatar: {
+    width: 50,
+    height: 50
   },
+  orangecard: {
+  	fontFamily: 'Oswald',
+    backgroundColor: '#ff9922',
+    padding: 20,
+    marginBottom: 10
+  },  
 });
