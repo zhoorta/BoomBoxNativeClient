@@ -8,9 +8,17 @@ export default class RemoteContent extends Component {
 
   constructor(props) {
     super(props)
+    this.state = { 
+      contentsource: ''
+      }
   }
 
 
+  changeSource = async () => {
+    if(this.state.contentsource==='') await this.setState({ contentsource: 'other' })
+    else await this.setState({ contentsource: '' })
+    this.props.refreshRemoteContent(this.state.contentsource)
+  }
 
   render() {
 
@@ -31,7 +39,7 @@ export default class RemoteContent extends Component {
       					<View key={content.id} style={styles.orangecard}>
       						<View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
       							<View>
-      				        		<Avatar rounded source={{ uri: content.thumbnail_url }} style={styles.avatar}/>
+      				        	<Avatar rounded source={{ uri: content.thumbnail_url }} style={styles.avatar}/>
       							</View>
       							<View>
       								<Button
@@ -59,14 +67,13 @@ export default class RemoteContent extends Component {
     				
     		)}
 
+        
       </View>
 
     );
 
   }
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -92,17 +99,24 @@ const styles = StyleSheet.create({
    marginTop: 20,
    marginRight: 10,
    marginBottom: 5
+  },    
+  contenttitle: {
+   fontFamily: 'Oswald',
+   fontSize: 20,
+   textAlign: 'center',
+   marginTop: 20,
+   marginRight: 10,
   },  
   redcard: {
-	fontFamily: 'Oswald',
+    fontFamily: 'Oswald',
     backgroundColor: '#de0000',
     padding: 20,
     margin: 10
   },
   orangecard: {
-	fontFamily: 'Oswald',
+    fontFamily: 'Oswald',
     backgroundColor: '#ff9922',
     padding: 20,
     marginBottom: 10
-  },
+  }
 });

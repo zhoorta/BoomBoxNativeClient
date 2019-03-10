@@ -15,7 +15,7 @@ export default class TaskList extends React.Component {
 
     return (
         <View>
-          <Text style={styles.tagtitle}>__DOWNLOADS__</Text>
+          <Text style={styles.tagtitle}>DOWNLOADING FROM SERVER</Text>
           <View style={styles.redcard}>
             { this.props.tasks.map((obj) =>
                 <DownloadTask key={obj.id} server={this.props.server} task={obj} onFinishDownload={this.props.onFinishDownload} />

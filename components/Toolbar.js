@@ -1,43 +1,64 @@
 import React from 'react'
-import { StyleSheet, Text, View, Image } from 'react-native'
-import { Button, Icon } from 'react-native-elements'
+import { StyleSheet, Text, View, Image, ToolbarAndroid } from 'react-native'
+import { ButtonGroup } from 'react-native-elements'
 
 
 export default class Toolbar extends React.Component {
 
   constructor(props) {
     super(props)
+    this.state = { selectedIndex: 0 }
   }
+
+  updateIndex = (selectedIndex) => {
+    console.log('updateIndex',selectedIndex)
+    if(selectedIndex===0) this.props.navigate('local')
+    else if(selectedIndex===1) this.props.navigate('server')
+    else if(selectedIndex===2) this.props.navigate('player')
+    this.setState({selectedIndex: selectedIndex})
+  }
+
+  onActionSelected = (position) => {
+    if(position===0) this.props.navigate('local')
+    else if(position===1) this.props.navigate('server')
+    else if(position===2) this.props.navigate('server-all')
+  }
+
+
 
   render() {
 
+    const buttons = ['Home', 'Server', 'Player']
+    const { selectedIndex } = this.state
+
     return (
-
-        <View style={styles.container}>
-          <View style={styles.imagecontainer}>
-            <Image source={require('../assets/logo.png')}/>
-          </View>
-          <View>
-            { this.props.show.local === true ?
-              <Button
-              icon={<Icon name='explore' size={30} color="#ff9922" />}
-              type="clear"
-              onPress={() => this.props.navigate('server')} 
-              buttonStyle={{ borderRadius: 20, borderWidth: 0, height: 50, width: 50}}
-              />
-              :
-              <Button
-              icon={<Icon name='eject' size={30} color="#ff9922" />}
-              type="clear"
-              onPress={() => this.props.navigate('local')} 
-              buttonStyle={{ borderRadius: 20, borderWidth: 0, height: 50, width: 50}}
-              />
-            }
-            
-          </View>
-
+      <View style={styles.container}>
+        <ToolbarAndroid
+          style={styles.toolbar}
+          title=""
+          logo={require("../assets/logo.png")}
+          onActionSelected={(position) => this.onActionSelected(position)}
+          titleColor= "#fff"
+          actions = {[
+            {title: "Home", show: "never"},
+            {title: "Server", show: "never"},
+            {title: "Server (more)", show: "never"},
+          ]}
+        />
+        <View>
+          <ButtonGroup
+            onPress={this.updateIndex}
+            selectedIndex={selectedIndex}
+            buttons={buttons}
+            innerBorderStyle={{ width:0, color:'#000' }}
+            containerStyle={{height: 50, backgroundColor: '#de0000', borderColor: '#de0000', elevation:3, marginBottom: 0, marginLeft: 0, marginRight: 0}}
+            textStyle={{fontFamily: 'Oswald', fontSize: 12, color:'#000'}}
+            selectedTextStyle={{fontFamily: 'Oswald', fontSize: 12, color:'#000'}}
+            selectedButtonStyle={{backgroundColor: '#ff9922'}}
+          />
         </View>
-    );
+      </View>
+    )
 
   }
 }
@@ -45,16 +66,12 @@ export default class Toolbar extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
-    flexDirection: 'row', 
-    justifyContent: 'space-between',
     backgroundColor: '#de0000',
-    color:'#ff9922',
-    height: 75,
-    padding: 10,
-    marginBottom: 20
-  },
-  imagecontainer: {
-    marginTop: 10
-  }
+  },   
+  toolbar: {
+    backgroundColor: '#de0000',
+    height: 60,
+    alignSelf: 'stretch',
+    textAlign: 'center',
+    }, 
 });

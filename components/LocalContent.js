@@ -1,6 +1,6 @@
 import React from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import { Avatar, Card, ListItem, Button, Icon, Image, Overlay, Divider } from 'react-native-elements'
+import { Avatar, Button, Icon, Image, Overlay, Divider } from 'react-native-elements'
 
 
 export default class LocalContent extends React.Component {
@@ -49,29 +49,32 @@ export default class LocalContent extends React.Component {
                     <View>
                           <Avatar rounded source={{ uri: content.thumbnail_url }} style={styles.avatar}/>
                     </View>
-                    <View>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                       
-                      <Button
-                        onPress={() => this.showOptions(content)} 
-                        icon={<Icon name='menu' />}
-                        type="clear"
-                        buttonStyle={{ borderRadius: 20, borderWidth: 0, height: 50, width: 50}}
-                      />                      
-                      { this.props.player_id===content.id ? (
+                      
                         <Button
-                          onPress={() => this.props.pauseContent()} 
-                          icon={<Icon name='pause' />}
+                          onPress={() => this.showOptions(content)} 
+                          icon={<Icon name='menu' />}
                           type="clear"
                           buttonStyle={{ borderRadius: 20, borderWidth: 0, height: 50, width: 50}}
                         />
-                        ): 
-                        <Button
-                          onPress={() => this.props.playContent(content.id,content.filepath)} 
-                          icon={<Icon name='play-arrow' />}
-                          type="clear"
-                          buttonStyle={{ borderRadius: 20, borderWidth: 0, height: 50, width: 50}}
-                        />
-                      }
+                     
+                        { this.props.player_id===content.id && this.props.player_status==='playing' ? (
+                          <Button
+                            onPress={() => this.props.pauseContent()} 
+                            icon={<Icon name='pause' />}
+                            type="clear"
+                            buttonStyle={{ borderRadius: 20, borderWidth: 0, height: 50, width: 50}}
+                          />
+                          ): 
+                          <Button
+                            onPress={() => this.props.playContent(content.id,content.filepath)} 
+                            icon={<Icon name='play-arrow' />}
+                            type="clear"
+                            buttonStyle={{ borderRadius: 20, borderWidth: 0, height: 50, width: 50}}
+                          />
+                        }
+                  
                     </View>
                     
                   </View>
@@ -139,30 +142,37 @@ const styles = StyleSheet.create({
     height: 50
   },
   tagtitle: {
-   fontFamily: 'Oswald',
-   fontSize: 16,
-   textAlign: 'right',
-   marginTop: 20,
-   marginRight: 10,
-   marginBottom: 5
+    fontFamily: 'Oswald',
+    fontSize: 16,
+    textAlign: 'right',
+    marginTop: 20,
+    marginRight: 10,
+    marginBottom: 5
+  },  
+  contenttitle: {
+    fontFamily: 'Oswald',
+    fontSize: 20,
+    textAlign: 'center',
+    marginTop: 20,
+    marginRight: 10,
   },  
   redcard: {
-  fontFamily: 'Oswald',
+    fontFamily: 'Oswald',
     backgroundColor: '#de0000',
     padding: 20,
     margin: 10
   },
   orangecard: {
-  fontFamily: 'Oswald',
+    fontFamily: 'Oswald',
     backgroundColor: '#ff9922',
     padding: 20,
     marginBottom: 10
   },  
   activecard: {
-  fontFamily: 'Oswald',
-  backgroundColor: '#6fde00',
-  padding: 20,
-  marginBottom: 10
+    fontFamily: 'Oswald',
+    backgroundColor: '#6fde00',
+    padding: 20,
+    marginBottom: 10
   },
   overlaycontainer: {
     fontFamily: 'Oswald',

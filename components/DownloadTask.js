@@ -10,41 +10,35 @@ export default class DownloadTask extends Component {
 	constructor() {
 		super()
 		this.state = { progress: 0 }
-		this._isMounted = false
 	}
 
 	async componentDidMount() {
-		this._isMounted = true
 		this.startDownload(this.server)
 	}
 
-	componentWillUnmount() {
-    	this._isMounted = false
-	}
-		
+
 	startDownload() {
 
-		if(this._isMounted) {
-		    RNFetchBlob
-		      .config({
-		        path : RNFetchBlob.fs.dirs.CacheDir + '/' + this.props.task.id + '.ogg'
-		      })
-		      .fetch('GET', (this.props.server + '/content/' + this.props.task.id) , {
-		        //some headers ..
-		      })
+	    RNFetchBlob
+	      .config({
+	        path : RNFetchBlob.fs.dirs.CacheDir + '/' + this.props.task.id + '.ogg'
+	      })
+	      .fetch('GET', (this.props.server + '/content/' + this.props.task.id) , {
+	        //some headers ..
+	      })
 
-		      .progress((received, total) => {
-		      	this.setState({ progress: Math.round(100 * received / total)})
-		      })
-		      .then((res) => {
+	      .progress((received, total) => {
+	      	this.setState({ progress: Math.round(100 * received / total)})
+	      })
+	      .then((res) => {
 
-		        console.log('task #' + this.props.task.id + ' | File saved to ', res.path())
-		        console.log('task #' + this.props.task.id + ' | finished')
+	        console.log('task #' + this.props.task.id + ' | File saved to ', res.path())
+	        console.log('task #' + this.props.task.id + ' | finished')
 
-		        this.props.onFinishDownload(this.props.task.id,res.path())
-		        
-		      })
-		}
+	        this.props.onFinishDownload(this.props.task.id,res.path())
+	        
+	      })
+
 	}   
 
 
